@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+dependencies {
+    compileOnly 'org.keycloak:keycloak-server-spi:15.0.2'
+    compileOnly 'org.keycloak:keycloak-services:15.0.2'
+}
+
+description = 'custom-theme-provider'
+java.sourceCompatibility = JavaVersion.VERSION_11
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    destinationDirectory.set(file("../../deployments"))
+}
+
+task wrapper(type: Wrapper){
+    gradleVersion = '6.8'
+}
+
+task prepareKotlinBuildScriptModel {
+
+}
