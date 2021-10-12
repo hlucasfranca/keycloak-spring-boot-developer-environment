@@ -2,13 +2,17 @@ package com.github.hlucasfranca.keycloak.server.config;
 
 import org.keycloak.Config;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.services.managers.ApplianceBootstrap;
 import org.keycloak.services.managers.RealmManager;
 import org.keycloak.services.resources.KeycloakApplication;
 import org.keycloak.services.util.JsonConfigProviderFactory;
+import org.keycloak.util.JsonSerialization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.github.hlucasfranca.keycloak.server.config.KeycloakServerProperties.AdminUser;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import java.util.NoSuchElementException;
 
@@ -64,9 +68,9 @@ public class EmbeddedKeycloakApplication extends KeycloakApplication {
                     .begin();
 
             RealmManager manager = new RealmManager(session);
-//            Resource lessonRealmImportFile = new ClassPathResource(keycloakServerProperties.getRealmImportFile());
+            Resource lessonRealmImportFile = new ClassPathResource(keycloakServerProperties.getRealmImportFile());
 
-//            manager.importRealm(JsonSerialization.readValue(lessonRealmImportFile.getInputStream(), RealmRepresentation.class));
+            manager.importRealm(JsonSerialization.readValue(lessonRealmImportFile.getInputStream(), RealmRepresentation.class));
 
             session.getTransactionManager()
                     .commit();

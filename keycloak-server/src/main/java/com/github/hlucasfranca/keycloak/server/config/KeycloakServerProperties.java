@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class KeycloakServerProperties {
 
     private String contextPath = "/auth";
-//    private String realmImportFile = "realm.json";
+    private String realmImportFile = "../imports/realm.json";
     private AdminUser adminUser = new AdminUser();
 
     @Data

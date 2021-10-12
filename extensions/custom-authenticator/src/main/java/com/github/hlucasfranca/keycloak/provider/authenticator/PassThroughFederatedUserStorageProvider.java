@@ -169,8 +169,14 @@ public class PassThroughFederatedUserStorageProvider implements
 
             @Override
             public void setUsername(String username) {
-
             }
+
+            @Override
+            public String getEmail() {
+                return "meuemail";
+            }
+
+
         };
     }
 }

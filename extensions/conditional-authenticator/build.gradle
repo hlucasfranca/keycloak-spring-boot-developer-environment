@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+}
+
+
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+def lista = [
+        'io.github.openfeign:feign-core:10.9',
+        'io.github.openfeign:feign-httpclient:10.4.0',
+        'io.github.openfeign:feign-okhttp:10.9'
+]
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    implementation 'org.jboss.resteasy:resteasy-jaxrs:3.15.1.Final'
+    implementation 'org.jboss.spec.javax.servlet:jboss-servlet-api_4.0_spec:2.0.0.Final'
+    implementation 'com.google.auto.service:auto-service:1.0'
+    implementation 'org.keycloak:keycloak-server-spi:15.0.2'
+    implementation 'org.keycloak:keycloak-server-spi-private:15.0.2'
+    implementation 'org.keycloak:keycloak-services:15.0.2'
+
+    implementation lista
+
+}
+
+
+
+group = 'com.github.hlucasfranca.keycloak'
+version = '1.0.0-SNAPSHOT'
+description = 'custom-authenticator'
+java.sourceCompatibility = JavaVersion.VERSION_11
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+def outputDirectory = file("../../deployments")
+
+jar {
+    destinationDirectory.set(outputDirectory)
+}
+
+task jarWithDeps(type: Copy) {
+    def conf = configurations.runtimeClasspath
+
+    println("coletando dependencias")
+
+    from conf.allDependencies
+            .findAll {
+                def fullName = "${it.group}:${it.name}:${it.version}"
+                println(fullName)
+                return lista.contains(fullName.toString())
+            }
+            .collect { conf.files(it) }
+    into outputDirectory
+}
+
+jar.finalizedBy(jarWithDeps)
+

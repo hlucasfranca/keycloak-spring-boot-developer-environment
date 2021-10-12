@@ -8,6 +8,7 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
 import javax.ws.rs.core.Response;
+import java.util.Arrays;
 
 @JBossLog
 public class CustomAuthenticatorForm implements Authenticator {
@@ -22,9 +23,27 @@ public class CustomAuthenticatorForm implements Authenticator {
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {
-        Response response = context.form()
-                .createForm("custom-form.ftl");
-        context.challenge(response);
+//        Response response = context.form()
+//                .createForm("custom-form.ftl");
+//        context.challenge(response);
+
+        UserModel demo = session.users().getUserByUsername(context.getRealm(), "demo");
+
+        String email = context.getAuthenticationSession().getAuthenticatedUser().getEmail();
+
+        context.getAuthenticationSession().setAuthNote("lalala", "oi");
+
+        if(!demo.isEnabled()){
+            System.out.println("oi");
+        } else {
+            System.out.println("oi");
+        }
+
+        context.getAuthenticationSession().getAuthenticatedUser().getAttributes();
+
+        context.success();
+
+
     }
 
     @Override
@@ -37,6 +56,10 @@ public class CustomAuthenticatorForm implements Authenticator {
         } else {
             System.out.println("oi");
         }
+
+        context.getUser().getAttributes().put("teste-put", Arrays.asList("teste.put"));
+
+        context.success();
 
         //context.challenge(context.form().createRegistration());
     }
