@@ -16,12 +16,12 @@ keycloak:
       password: admin
 #    realmImportFile: realm.json
 
-#logging:
-#  level:
+logging:
+  level:
 #    org: DEBUG
-#    org.keycloak: DEBUG
+    org.keycloak: DEBUG
 #    org.jboss: DEBUG
-#    org.infinispan: DEBUG
+    org.infinispan: DEBUG
 #    org.springframework: DEBUG
 #    org.springframework.boot.autoconfigure.logging: DEBUG
 #    org.springframework.context.support: DEBUG
