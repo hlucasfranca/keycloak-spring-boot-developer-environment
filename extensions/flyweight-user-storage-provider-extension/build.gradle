@@ -24,6 +24,9 @@ dependencies {
     implementation 'org.keycloak:keycloak-server-spi:15.0.2'
     implementation 'org.keycloak:keycloak-server-spi-private:15.0.2'
     implementation 'org.keycloak:keycloak-services:15.0.2'
+    // https://mvnrepository.com/artifact/org.keycloak/keycloak-model-jpa
+    implementation group: 'org.keycloak', name: 'keycloak-model-jpa', version: '15.0.2'
+
 
     implementation lista
 

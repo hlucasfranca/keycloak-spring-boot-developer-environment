@@ -19,7 +19,7 @@ class AcmeUserRepository {
     public AcmeUserRepository() {
         acmeUsers = List.of(
                 new AcmeUser("1", "user1", "secret", "First1", "Last1",
-                        Map.of("attribute1", List.of("value1_1")), true),
+                        Map.of("phoneNumber", List.of("22222")), true),
                 new AcmeUser("2", "user2", "secret", "First2", "Last2",
                         Map.of("attribute1", List.of("value1_2")), true),
                 new AcmeUser("3", "user3", "secret", "First3", "Last3",

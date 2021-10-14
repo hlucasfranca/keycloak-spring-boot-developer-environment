@@ -1,5 +1,6 @@
 package com.github.thomasdarimont.keycloak.userstorage.flyweight;
 
+import org.jboss.logging.Logger;
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.credential.CredentialInput;
@@ -17,10 +18,7 @@ import org.keycloak.storage.user.UserLookupProvider;
 import org.keycloak.storage.user.UserQueryProvider;
 import org.keycloak.storage.user.UserRegistrationProvider;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FlyweightAcmeUserStorageProvider implements
@@ -43,6 +41,8 @@ public class FlyweightAcmeUserStorageProvider implements
     private final KeycloakSession session;
     private final ComponentModel storageComponentModel;
     private final AcmeUserRepository repository;
+    private final Logger log = Logger.getLogger(getClass());
+    protected Map<String, UserModel> loadedUsers = new HashMap<>();
 
     public FlyweightAcmeUserStorageProvider(KeycloakSession session, ComponentModel storageComponentModel, AcmeUserRepository repository) {
         this.session = session;
@@ -63,7 +63,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public boolean isValid(RealmModel realm, UserModel user, CredentialInput input) {
 
-        // log.infov("isValid user credential: userId={0}", user.getId());
+        log.infov("isValid user credential: userId={0}", user.getId());
 
         if (!supportsCredentialType(input.getType()) || !(input instanceof UserCredentialModel)) {
             return false;
@@ -76,7 +76,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public boolean updateCredential(RealmModel realm, UserModel user, CredentialInput input) {
 
-        // log.infov("updating credential: realm={0} user={1}", realm.getId(), user.getUsername());
+        log.infov("updating credential: realm={0} user={1}", realm.getId(), user.getUsername());
 
         if (!supportsCredentialType(input.getType()) || !(input instanceof UserCredentialModel)) {
             return false;
@@ -89,7 +89,7 @@ public class FlyweightAcmeUserStorageProvider implements
 
     @Override
     public void disableCredentialType(RealmModel realm, UserModel user, String credentialType) {
-        // log.infov("disable credential type: realm={0} user={1} credentialType={2}", realm.getId(), user.getUsername(), credentialType);
+        log.infov("disable credential type: realm={0} user={1} credentialType={2}", realm.getId(), user.getUsername(), credentialType);
     }
 
     @Override
@@ -100,40 +100,48 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public void preRemove(RealmModel realm) {
 
-        // log.infov("pre-remove realm");
+        log.infov("pre-remove realm");
     }
 
     @Override
     public void preRemove(RealmModel realm, GroupModel group) {
 
-        // log.infov("pre-remove group");
+        log.infov("pre-remove group");
     }
 
     @Override
     public void preRemove(RealmModel realm, RoleModel role) {
 
-        // log.infov("pre-remove role");
+        log.infov("pre-remove role");
     }
 
     @Override
     public void close() {
-        // log.infov("closing");
+        log.infov("closing");
     }
 
     @Override
     public UserModel getUserById(String id, RealmModel realm) {
 
-        // log.infov("lookup user by id: realm={0} userId={1}", realm.getId(), id);
+        log.infov("lookup user by id: realm={0} userId={1}", realm.getId(), id);
 
-        String externalId = StorageId.externalId(id);
-        return createAdapter(realm, repository.findUserById(externalId));
+        StorageId userId = new StorageId(id);
+        String userName = userId.getExternalId();
+
+        return getUserByUsername(userName, realm);
     }
 
     @Override
     public UserModel getUserByUsername(String username, RealmModel realm) {
-
-        // log.infov("lookup user by username: realm={0} username={1}", realm.getId(), username);
-        return createAdapter(realm, repository.findUserByUsernameOrEmail(username));
+        UserModel adapter = loadedUsers.get(username);
+        if (adapter == null) {
+            log.info("not cached");
+            UserModel m = createAdapter(realm, repository.findUserByUsernameOrEmail(username));
+            loadedUsers.put(username, m);
+            return m;
+        }
+        log.info("cached");
+        return adapter;
     }
 
     protected UserModel createAdapter(RealmModel realm, AcmeUser acmeUser) {
@@ -149,7 +157,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public UserModel getUserByEmail(String email, RealmModel realm) {
 
-        // log.infov("lookup user by username: realm={0} email={1}", realm.getId(), email);
+        log.infov("lookup user by username: realm={0} email={1}", realm.getId(), email);
 
         return getUserByUsername(email, realm);
     }
@@ -162,7 +170,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public List<UserModel> getUsers(RealmModel realm) {
 
-        // log.infov("list users: realm={0}", realm.getId());
+        log.infov("list users: realm={0}", realm.getId());
 
         return repository.getAllUsers().stream()
                 .map(acmeUser -> new AcmeUserAdapter(session, realm, storageComponentModel, acmeUser))
@@ -172,7 +180,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public List<UserModel> getUsers(RealmModel realm, int firstResult, int maxResults) {
 
-        // log.infov("list users: realm={0} firstResult={1} maxResults={2}", realm.getId(), firstResult, maxResults);
+        log.infov("list users: realm={0} firstResult={1} maxResults={2}", realm.getId(), firstResult, maxResults);
 
         return getUsers(realm);
     }
@@ -180,7 +188,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public List<UserModel> searchForUser(String search, RealmModel realm) {
 
-        // log.infov("search for users: realm={0} search={1}", realm.getId(), search);
+        log.infov("search for users: realm={0} search={1}", realm.getId(), search);
 
         return searchForUser(search, realm, 0, -1);
     }
@@ -188,7 +196,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public List<UserModel> searchForUser(String search, RealmModel realm, int firstResult, int maxResults) {
 
-        // log.infov("search for users: realm={0} search={1} firstResult={2} maxResults={3}", realm.getId(), search, firstResult, maxResults);
+        log.infov("search for users: realm={0} search={1} firstResult={2} maxResults={3}", realm.getId(), search, firstResult, maxResults);
 
         if (search.contains(":")) {
             String attributeName = search.substring(0, search.indexOf(":"));
@@ -207,7 +215,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public List<UserModel> searchForUser(Map<String, String> params, RealmModel realm) {
 
-        // log.infov("search for users with params: realm={0} params={1}", realm.getId(), params);
+        log.infov("search for users with params: realm={0} params={1}", realm.getId(), params);
 
         return searchForUser(params, realm, 0, -1);
     }
@@ -215,7 +223,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public List<UserModel> searchForUser(Map<String, String> params, RealmModel realm, int firstResult, int maxResults) {
 
-        // log.infov("search for users with params: realm={0} params={1} firstResult={2} maxResults={3}", realm.getId(), params, firstResult, maxResults);
+        log.infov("search for users with params: realm={0} params={1} firstResult={2} maxResults={3}", realm.getId(), params, firstResult, maxResults);
 
         // use params from org.keycloak.models.UserModel
 
@@ -225,7 +233,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public List<UserModel> getGroupMembers(RealmModel realm, GroupModel group) {
 
-        // log.infov("search for group members: realm={0} groupId={1} firstResult={2} maxResults={3}", realm.getId(), group.getId());
+        log.infov("search for group members: realm={0} groupId={1} firstResult={2} maxResults={3}", realm.getId(), group.getId());
 
         return getGroupMembers(realm, group, 0, -1);
     }
@@ -233,7 +241,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public List<UserModel> getGroupMembers(RealmModel realm, GroupModel group, int firstResult, int maxResults) {
 
-        // log.infov("search for group members with params: realm={0} groupId={1} firstResult={2} maxResults={3}", realm.getId(), group.getId(), firstResult, maxResults);
+        log.infov("search for group members with params: realm={0} groupId={1} firstResult={2} maxResults={3}", realm.getId(), group.getId(), firstResult, maxResults);
 
         return Collections.emptyList();
     }
@@ -241,7 +249,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public List<UserModel> searchForUserByUserAttribute(String attrName, String attrValue, RealmModel realm) {
 
-        // log.infov("search for user by attribute: realm={0} attrName={1} attrValue={2}", realm.getId(), attrName, attrValue);
+        log.infov("search for user by attribute: realm={0} attrName={1} attrValue={2}", realm.getId(), attrName, attrValue);
 
         return repository.findUsersByAttribute(attrName, attrValue, 0, -1).stream()
                 .map(id -> new AcmeUserAdapter(session, realm, storageComponentModel, repository.findUserById(id)))
@@ -251,12 +259,12 @@ public class FlyweightAcmeUserStorageProvider implements
     /* UserRoleMappingsFederatedStorage start */
     @Override
     public void grantRole(RealmModel realm, String userId, RoleModel role) {
-        // log.infov("grant role mapping: realm={0} userId={1} role={2}", realm.getId(), userId, role.getName());
+        log.infov("grant role mapping: realm={0} userId={1} role={2}", realm.getId(), userId, role.getName());
     }
 
     @Override
     public Set<RoleModel> getRoleMappings(RealmModel realm, String userId) {
-        // log.infov("get role mappings: realm={0} userId={1}", realm.getId(), userId);
+        log.infov("get role mappings: realm={0} userId={1}", realm.getId(), userId);
 
         String externalUserId = StorageId.externalId(userId);
 
@@ -284,30 +292,30 @@ public class FlyweightAcmeUserStorageProvider implements
 
     @Override
     public void deleteRoleMapping(RealmModel realm, String userId, RoleModel role) {
-        // log.infov("delete role mapping: realm={0} userId={1} role={2}", realm.getId(), userId, role.getName());
+        log.infov("delete role mapping: realm={0} userId={1} role={2}", realm.getId(), userId, role.getName());
     }
 
     /* UserRoleMappingsFederatedStorage end */
 
     @Override
     public void setSingleAttribute(RealmModel realm, String userId, String name, String value) {
-        // log.infov("set single attribute: realm={0} userId={1} name={2} value={3}", realm.getId(), userId, name, value);
+        log.infov("set single attribute: realm={0} userId={1} name={2} value={3}", realm.getId(), userId, name, value);
     }
 
     @Override
     public void setAttribute(RealmModel realm, String userId, String name, List<String> values) {
-        // log.infov("set attribute: realm={0} userId={1} name={2} value={3}", realm.getId(), userId, name, values);
+        log.infov("set attribute: realm={0} userId={1} name={2} value={3}", realm.getId(), userId, name, values);
     }
 
     @Override
     public void removeAttribute(RealmModel realm, String userId, String name) {
-        // log.infov("remove attribute: realm={0} userId={1} name={2}", realm.getId(), userId, name);
+        log.infov("remove attribute: realm={0} userId={1} name={2}", realm.getId(), userId, name);
     }
 
     @Override
     public MultivaluedHashMap<String, String> getAttributes(RealmModel realm, String userId) {
 
-        // log.infov("get attributes: realm={0} userId={1}", realm.getId(), userId);
+        log.infov("get attributes: realm={0} userId={1}", realm.getId(), userId);
 
         String externalId = StorageId.externalId(userId);
         AcmeUser acmeUser = repository.findUserById(externalId);
@@ -318,7 +326,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public List<String> getUsersByUserAttribute(RealmModel realm, String name, String value) {
 
-        // log.infov("get users by user attribute: realm={0} name={1} value={2}", realm.getId(), value);
+        log.infov("get users by user attribute: realm={0} name={1} value={2}", realm.getId(), value);
 
         return repository.findUsersByAttribute(name, value, 0, -1);
     }
@@ -328,13 +336,13 @@ public class FlyweightAcmeUserStorageProvider implements
 //
 //        user.getDelegateForUpdate();
 //
-//        // log.infov("on cache: realm={0} username={1}", realm.getId(), user.getUsername());
+//        log.infov("on cache: realm={0} username={1}", realm.getId(), user.getUsername());
 //    }
 
     @Override
     public UserModel addUser(RealmModel realm, String username) {
 
-        // log.infov("add user: realm={0} username={1}", realm.getId(), username);
+        log.infov("add user: realm={0} username={1}", realm.getId(), username);
 
         // this is not supported
         return null;
@@ -343,7 +351,7 @@ public class FlyweightAcmeUserStorageProvider implements
     @Override
     public boolean removeUser(RealmModel realm, UserModel user) {
 
-        // log.infov("remove user: realm={0} username={1}", realm.getId(), user.getUsername());
+        log.infov("remove user: realm={0} username={1}", realm.getId(), user.getUsername());
 
         // this is not supported
         return false;
