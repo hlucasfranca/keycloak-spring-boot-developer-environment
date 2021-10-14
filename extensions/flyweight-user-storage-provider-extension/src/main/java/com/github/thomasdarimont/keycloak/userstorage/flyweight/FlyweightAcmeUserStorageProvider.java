@@ -7,9 +7,8 @@ import org.keycloak.credential.CredentialInput;
 import org.keycloak.credential.CredentialInputUpdater;
 import org.keycloak.credential.CredentialInputValidator;
 import org.keycloak.models.*;
-import org.keycloak.models.cache.CachedUserModel;
-import org.keycloak.models.cache.OnUserCache;
 import org.keycloak.models.credential.PasswordCredentialModel;
+import org.keycloak.models.utils.UserModelDelegate;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.UserStorageProvider;
 import org.keycloak.storage.federated.UserAttributeFederatedStorage;
@@ -35,7 +34,6 @@ public class FlyweightAcmeUserStorageProvider implements
 
         , UserRoleMappingsFederatedStorage
 
-        , OnUserCache
 {
 
     private final KeycloakSession session;
@@ -136,7 +134,7 @@ public class FlyweightAcmeUserStorageProvider implements
         UserModel adapter = loadedUsers.get(username);
         if (adapter == null) {
             log.info("not cached");
-            UserModel m = createAdapter(realm, repository.findUserByUsernameOrEmail(username));
+            UserModel m = createAdapter(realm, username);
             loadedUsers.put(username, m);
             return m;
         }
@@ -144,14 +142,32 @@ public class FlyweightAcmeUserStorageProvider implements
         return adapter;
     }
 
-    protected UserModel createAdapter(RealmModel realm, AcmeUser acmeUser) {
+    protected UserModel createAdapter(RealmModel realm, String username) {
 
-        if (acmeUser == null) {
-            return null;
+        UserModel local = session.userLocalStorage().getUserByUsername(username, realm);
+
+        if (local == null) {
+            log.info("not in local");
+
+            AcmeUser acmeUser = repository.findUserByUsernameOrEmail(username);
+
+            local = session.userLocalStorage().addUser(realm, username);
+            local.setEmail(acmeUser.getEmail());
+            local.setEnabled(true);
+            local.setEmailVerified(true);
+            local.setFirstName(acmeUser.getFirstName());
+            local.setLastName(acmeUser.getLastName());
+
+            for(String key : acmeUser.getAttributes().keySet()){
+                local.setAttribute(key, acmeUser.getAttributes().get(key));
+            }
+
+            local.setFederationLink(storageComponentModel.getId());
+        } else {
+            log.info("in local");
         }
 
-        AcmeUserAdapter acmeUserAdapter = new AcmeUserAdapter(session, realm, storageComponentModel, acmeUser);
-        return acmeUserAdapter;
+        return new UserModelDelegate(local);
     }
 
     @Override
@@ -357,10 +373,10 @@ public class FlyweightAcmeUserStorageProvider implements
         return false;
     }
 
-    @Override
-    public void onCache(RealmModel realm, CachedUserModel user, UserModel delegate) {
-        user.setEmail(delegate.getEmail());
-        user.setUsername(delegate.getUsername());
-
-    }
+//    @Override
+//    public void onCache(RealmModel realm, CachedUserModel user, UserModel delegate) {
+//        user.setEmail(delegate.getEmail());
+//        user.setUsername(delegate.getUsername());
+//
+//    }
 }
