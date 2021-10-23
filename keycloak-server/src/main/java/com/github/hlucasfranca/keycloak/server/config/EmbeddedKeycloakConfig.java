@@ -29,6 +29,7 @@ public class EmbeddedKeycloakConfig {
         servlet.addInitParameter("javax.ws.rs.Application", EmbeddedKeycloakApplication.class.getName());
         servlet.addInitParameter(ResteasyContextParameters.RESTEASY_SERVLET_MAPPING_PREFIX, keycloakServerProperties.getContextPath());
         servlet.addInitParameter(ResteasyContextParameters.RESTEASY_USE_CONTAINER_FORM_PARAMS, "true");
+        servlet.addInitParameter(ResteasyContextParameters.RESTEASY_DISABLE_HTML_SANITIZER, "true");
         servlet.addUrlMappings(keycloakServerProperties.getContextPath() + "/*");
         servlet.setLoadOnStartup(1);
         servlet.setAsyncSupported(true);
