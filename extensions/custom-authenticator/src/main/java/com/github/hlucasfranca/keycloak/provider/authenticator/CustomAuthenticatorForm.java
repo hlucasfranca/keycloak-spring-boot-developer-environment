@@ -2,13 +2,21 @@ package com.github.hlucasfranca.keycloak.provider.authenticator;
 
 import lombok.extern.jbosslog.JBossLog;
 import org.keycloak.authentication.AuthenticationFlowContext;
+import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.Authenticator;
+import org.keycloak.events.Errors;
+import org.keycloak.events.EventBuilder;
+import org.keycloak.forms.login.LoginFormsProvider;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.models.utils.FormMessage;
+import org.keycloak.services.messages.Messages;
 
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @JBossLog
 public class CustomAuthenticatorForm implements Authenticator {
@@ -23,45 +31,34 @@ public class CustomAuthenticatorForm implements Authenticator {
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {
-//        Response response = context.form()
-//                .createForm("custom-form.ftl");
-//        context.challenge(response);
-
-        UserModel demo = session.users().getUserByUsername(context.getRealm(), "demo");
-
-        String email = context.getAuthenticationSession().getAuthenticatedUser().getEmail();
-
-        context.getAuthenticationSession().setAuthNote("lalala", "oi");
-
-        if(!demo.isEnabled()){
-            System.out.println("oi");
-        } else {
-            System.out.println("oi");
-        }
-
-        context.getAuthenticationSession().getAuthenticatedUser().getAttributes();
-
-        context.success();
-
-
+        Response response = context.form()
+                .createForm("custom-form.ftl");
+        context.challenge(response);
     }
 
     @Override
     public void action(AuthenticationFlowContext context) {
+        EventBuilder event = context.getEvent();
+        event.detail("customDetail", "my custom detail");
 
-        UserModel demo = session.users().getUserByUsername(context.getRealm(), "demo");
+        UserModel user = session.users().getUserByUsername(context.getRealm(), context.getHttpRequest().getDecodedFormParameters().getFirst("username"));
 
-        if(!demo.isEnabled()){
-            System.out.println("oi");
+        if(!user.isEnabled()){
+            log.infov("{0}", event.getEvent().getDetails());
+            event.error("meu_erro_personalizado");
+
+            List<FormMessage> lista = new ArrayList<>();
+            lista.add(new FormMessage(Messages.ACCOUNT_DISABLED));
+            LoginFormsProvider loginFormsProvider = context.form().setErrors(lista);
+
+            context.failureChallenge(AuthenticationFlowError.USER_DISABLED, loginFormsProvider.createForm("custom-form.ftl"));
         } else {
-            System.out.println("oi");
+            context.setUser(user);
+            context.getUser().getAttributes().put("teste-put", Arrays.asList("teste.put"));
+            log.infov("{0}", event.getEvent().getDetails());
+            context.success();
         }
 
-        context.getUser().getAttributes().put("teste-put", Arrays.asList("teste.put"));
-
-        context.success();
-
-        //context.challenge(context.form().createRegistration());
     }
 
     @Override
