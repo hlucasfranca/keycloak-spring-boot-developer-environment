@@ -38,6 +38,10 @@ public class CustomAuthenticatorForm implements Authenticator {
 
     @Override
     public void action(AuthenticationFlowContext context) {
+
+        if("aa".equals("aa"))
+            throw new IllegalArgumentException("erro");
+
         EventBuilder event = context.getEvent();
         event.detail("customDetail", "my custom detail");
 
