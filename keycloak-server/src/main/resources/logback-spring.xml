@@ -4,7 +4,14 @@
     <appender name="Console"
               class="ch.qos.logback.core.ConsoleAppender">
 
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <fieldNames>
+                <timestamp>timestamp</timestamp>
+                <stackTrace>stacktrace</stackTrace>
+                <levelValue>[ignore]</levelValue>
+                <version>[ignore]</version>
+            </fieldNames>
+        </encoder>
     </appender>
 
     <root level="info">
@@ -14,5 +21,9 @@
     <logger name="org.keycloak.events" level="debug" additivity="false">
         <appender-ref ref="Console" />
     </logger>
+
+    <logger name="org.keycloak.services" level="debug" additivity="false">
+            <appender-ref ref="Console" />
+        </logger>
 
 </configuration>
