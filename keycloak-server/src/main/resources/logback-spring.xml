@@ -14,16 +14,31 @@
         </encoder>
     </appender>
 
+    <appender name="arquivo" class="ch.qos.logback.core.FileAppender">
+        <file>logs/application.log</file>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+<!--            <fieldNames>-->
+<!--                <timestamp>timestamp</timestamp>-->
+<!--                <stackTrace>stacktrace</stackTrace>-->
+<!--                <levelValue>[ignore]</levelValue>-->
+<!--                <version>[ignore]</version>-->
+<!--            </fieldNames>-->
+        </encoder>
+    </appender>
+
     <root level="info">
         <appender-ref ref="Console" />
+        <appender-ref ref="arquivo" />
     </root>
 
     <logger name="org.keycloak.events" level="debug" additivity="false">
         <appender-ref ref="Console" />
+        <appender-ref ref="arquivo" />
     </logger>
 
     <logger name="org.keycloak.services" level="debug" additivity="false">
             <appender-ref ref="Console" />
+            <appender-ref ref="arquivo" />
         </logger>
 
 </configuration>
