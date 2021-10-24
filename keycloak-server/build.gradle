@@ -4,6 +4,10 @@ plugins {
     id 'java'
 }
 
+configurations.all {
+    exclude module: 'slf4j-log4j12'
+}
+
 group = 'com.github.hlucasfranca'
 version = '1.0.0-SNAPSHOT'
 sourceCompatibility = '11'
@@ -21,7 +25,7 @@ repositories {
 dependencies {
     implementation project(':extensions:custom-authenticator')
     implementation project(':extensions:rest-user-provider')
-    implementation project(':extensions:theme-provider')
+//    implementation project(':extensions:theme-provider')
     implementation project(':extensions:flyweight-user-storage-provider-extension')
     implementation project(':extensions:conditional-authenticator')
 
@@ -46,6 +50,13 @@ dependencies {
             'org.projectlombok:lombok'
     )
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.6'
+
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.4'
+
 }
 
 
