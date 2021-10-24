@@ -48,10 +48,12 @@ public class CustomAuthenticatorForm implements Authenticator {
             event.error("meu_erro_personalizado");
 
             List<FormMessage> lista = new ArrayList<>();
-            lista.add(new FormMessage(Messages.ACCOUNT_DISABLED));
+            lista.add(new FormMessage("Conta desativada"));
+            lista.add(new FormMessage("Sistema fora do ar"));
             LoginFormsProvider loginFormsProvider = context.form().setErrors(lista);
 
-            context.failureChallenge(AuthenticationFlowError.USER_DISABLED, loginFormsProvider.createForm("custom-form.ftl"));
+//            context.failureChallenge(AuthenticationFlowError.INTERNAL_ERROR, loginFormsProvider.createForm("custom-form.ftl"));
+            context.failureChallenge(AuthenticationFlowError.INTERNAL_ERROR, loginFormsProvider.createForm("generic-error.ftl"));
         } else {
             context.setUser(user);
             context.getUser().getAttributes().put("teste-put", Arrays.asList("teste.put"));
