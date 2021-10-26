@@ -1,8 +1,6 @@
 package com.github.hlucasfranca.keycloak.provider.authenticator;
 
-import com.google.auto.service.AutoService;
 import org.keycloak.Config;
-import org.keycloak.authentication.AuthenticatorFactory;
 import org.keycloak.authentication.authenticators.conditional.ConditionalAuthenticator;
 import org.keycloak.authentication.authenticators.conditional.ConditionalAuthenticatorFactory;
 import org.keycloak.models.AuthenticationExecutionModel;
