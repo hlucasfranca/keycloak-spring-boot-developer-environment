@@ -1,5 +1,10 @@
 FROM jboss/keycloak:15.0.2
 
+RUN mkdir -p /opt/jboss/startup-scripts/
+COPY ./startup_scripts /opt/jboss/startup-scripts
+
+# ENV KEYCLOAK_LOGLEVEL=DEBUG
+
 ENV KEYCLOAK_USER=admin
 ENV KEYCLOAK_PASSWORD=admin
 
