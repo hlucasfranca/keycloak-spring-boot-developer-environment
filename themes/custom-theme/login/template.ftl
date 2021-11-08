@@ -147,6 +147,9 @@
 
     </div>
   </div>
+  <script>
+   ${client.name}
+   </script>
 </body>
 </html>
 </#macro>
