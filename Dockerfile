@@ -2,25 +2,23 @@ ARG my_arg
 
 FROM jboss/keycloak:15.0.2 as base
 
-
-
-RUN echo "copy defaults"
-
+RUN echo "Copiando defaults"
 COPY ./themes/ /opt/jboss/keycloak/themes/
 
 FROM base AS ambiente-dev
 ENV AMBIENTE=DESENVOLVIMENTO
 RUN echo "Ambiente de desenvolvimento"
-COPY ./themes/custom-theme/login/theme-dev.properties /opt/jboss/keycloak/themes/custom-theme/login/theme.properties
+USER root
+RUN sed -i 's/^parent=.*/parent=oi/g' /opt/jboss/keycloak/themes/custom-theme/login/theme.properties
 
 FROM base AS ambiente-hml
 ENV AMBIENTE=HOMOLOGACAO
 RUN echo "Ambiente de homologação"
-COPY ./themes/custom-theme/login/theme-hml.properties /opt/jboss/keycloak/themes/custom-theme/login/theme.properties
+USER root
+RUN sed -i 's/^parent=.*/parent=tchau/g' /opt/jboss/keycloak/themes/custom-theme/login/theme.properties
 
 FROM ambiente-${my_arg} AS final
 RUN echo "Ambiente é ${AMBIENTE}"
-
 
 # ENV KEYCLOAK_LOGLEVEL=DEBUG
 ENV KEYCLOAK_USER=admin
