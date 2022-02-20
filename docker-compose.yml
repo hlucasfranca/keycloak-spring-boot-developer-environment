@@ -4,10 +4,22 @@ volumes:
       driver: local
 #
 services:
+  infinispan:
+    image: infinispan/server:12.1
+    ports:
+      - "11222:11222"
+    volumes:
+      - ./infinispan:/opt/is-config
+    environment:
+      USER: keycloak
+      PASS: password
+    command:
+      - "-c"
+      - "/opt/is-config/infinispan-keycloak.xml"
   postgres:
       image: postgres
       ports:
-        - 5432:5432
+        - "5432:5432"
       volumes:
         - postgres_data:/var/lib/postgresql/data
       environment:
@@ -16,10 +28,13 @@ services:
         POSTGRES_PASSWORD: password
   keycloak:
       volumes:
+        - ./startup_scripts:/opt/jboss/startup-scripts
         - ./imports:/opt/jboss/keycloak/imports
-        - ./deployments:/opt/jboss/keycloak/standalone/deployments
-        - ./themes/custom-theme:/opt/jboss/keycloak/themes/custom-theme
+        #- ./deployments:/opt/jboss/keycloak/standalone/deployments
+        #- ./themes/custom-theme:/opt/jboss/keycloak/themes/custom-theme
       image: jboss/keycloak:15.0.2
+      env_file:
+        - ./keycloak.env
       environment:
         DB_VENDOR: POSTGRES
         DB_ADDR: postgres
@@ -33,6 +48,7 @@ services:
         # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
         #JDBC_PARAMS: "ssl=true"
       ports:
-        - 8080:8080
+        - "8080:8080"
       depends_on:
         - postgres
+        - infinispan
