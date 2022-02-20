@@ -36,6 +36,7 @@ services:
       env_file:
         - ./keycloak.env
       environment:
+        JAVA_OPTS: "-Djboss.site.name=keycloak"
         DB_VENDOR: POSTGRES
         DB_ADDR: postgres
         DB_DATABASE: keycloak
