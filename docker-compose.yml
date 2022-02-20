@@ -5,17 +5,17 @@ volumes:
 #
 services:
   infinispan:
-    image: infinispan/server:12.1
+    image: infinispan/server:13.0.2.Final
     ports:
       - "11222:11222"
     volumes:
-      - ./infinispan:/opt/is-config
+      - type: bind
+        source: ./infinispan/infinispan-keycloak.xml
+        target: /opt/infinispan/server/conf/infinispan-keycloak.xml
     environment:
       USER: keycloak
       PASS: password
-    command:
-      - "-c"
-      - "/opt/is-config/infinispan-keycloak.xml"
+    command: "-c /opt/infinispan/server/conf/infinispan-keycloak.xml"
   postgres:
       image: postgres
       ports:

@@ -1,11 +1,9 @@
-<infinispan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:infinispan:config:11.0" xmlns:server="urn:infinispan:server:11.0" xsi:schemaLocation="urn:infinispan:config:11.0 https://infinispan.org/schemas/infinispan-config-11.0.xsd urn:infinispan:server:11.0 https://infinispan.org/schemas/infinispan-server-11.0.xsd">
+<config:infinispan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:config="urn:infinispan:config:13.0"
+                   xmlns:serv="urn:infinispan:server:13.0"
+                   xsi:schemaLocation="urn:infinispan:config:13.0 http://www.infinispan.org/schemas/infinispan-config-13.0.xsd urn:infinispan:server:13.0 http://www.infinispan.org/schemas/infinispan-server-13.0.xsd">
 
-    <!-- TODO configure JGROUPS tcp Stack with encryption -->
-
-    <!-- see https://docs.jboss.org/infinispan/11.0/configdocs/infinispan-config-11.0.html -->
-
-    <cache-container name="default" statistics="true">
-
+    <config:cache-container name="default" statistics="true">
         <!-- TODO revise jgroups stack to use -->
         <transport
                 cluster="${infinispan.cluster.name:cluster}"
@@ -34,11 +32,11 @@
         </replicated-cache>
 
         <distributed-cache name="sessions" owners="2" configuration="distributed-cache-cfg">
-                <persistence passivation="true">
-                    <!-- purge="false" fetch-state="false" see:  https://infinispan.org/docs/stable/titles/configuring/configuring.html#configuring_cache_stores-persistence-->
-                    <file-store preload="true" purge="false" fetch-state="false" path="../mydata/sessions">
-                    </file-store>
-                </persistence>
+            <persistence passivation="true">
+                <!-- purge="false" fetch-state="false" see:  https://infinispan.org/docs/stable/titles/configuring/configuring.html#configuring_cache_stores-persistence-->
+                <file-store preload="true" purge="false" fetch-state="false" path="../mydata/sessions">
+                </file-store>
+            </persistence>
         </distributed-cache>
 
         <distributed-cache name="authenticationSessions" owners="2" configuration="distributed-cache-cfg">
@@ -63,45 +61,38 @@
             </memory>
             <expiration interval="300000" max-idle="-1"/>
         </distributed-cache>
-    </cache-container>
+    </config:cache-container>
 
-    <server xmlns="urn:infinispan:server:11.0">
 
-        <interfaces>
-            <interface name="public">
-                <!-- we bind to the eth0 interface instead of a specific ip address to ease access -->
-<!--                <inet-address value="${infinispan.bind.address:127.0.0.1}"/>-->
-                <match-interface value="eth0"/>
-            </interface>
-        </interfaces>
+    <serv:server>
+        <serv:interfaces>
+            <serv:interface name="public">
+                <serv:inet-address value="${infinispan.bind.address:0.0.0.0}"/>
+            </serv:interface>
+        </serv:interfaces>
 
-        <socket-bindings default-interface="public" port-offset="${infinispan.socket.binding.port-offset:0}">
-            <socket-binding name="default" port="${infinispan.bind.port:11222}"/>
-            <socket-binding name="memcached" port="11221"/>
-        </socket-bindings>
+        <serv:socket-bindings default-interface="public" port-offset="0">
+            <serv:socket-binding name="default" port="11222"/>
+        </serv:socket-bindings>
 
-        <security>
-            <security-realms>
-                <security-realm name="default">
-                    <!--  Uncomment to enable TLS on the realm  -->
-                    <server-identities>
-                      <ssl>
-                         <keystore path="ispn-server.jks" relative-to="infinispan.server.config.path" keystore-password="password" alias="server" key-password="password" generate-self-signed-certificate-host="localhost"/>
-                      </ssl>
-                   </server-identities>
-                    <properties-realm groups-attribute="Roles">
-                        <user-properties path="users.properties" relative-to="infinispan.server.config.path" plain-text="true"/>
-                        <group-properties path="groups.properties" relative-to="infinispan.server.config.path"/>
-                    </properties-realm>
-                </security-realm>
-            </security-realms>
-        </security>
+        <serv:security>
+            <serv:security-realms>
+                <serv:security-realm name="default">
+                    <serv:properties-realm groups-attribute="Roles">
+                        <serv:user-properties path="users.properties" relative-to="infinispan.server.config.path"/>
+                        <serv:group-properties path="groups.properties" relative-to="infinispan.server.config.path"/>
+                    </serv:properties-realm>
+                </serv:security-realm>
+            </serv:security-realms>
+        </serv:security>
 
-        <endpoints socket-binding="default" security-realm="default">
-            <hotrod-connector name="hotrod" >
-                <!-- TODO configure additional authentication -->
-            </hotrod-connector>
-            <rest-connector name="rest"/>
+        <endpoints>
+            <endpoint socket-binding='default' security-realm="default">
+                <hotrod-connector name="hotrod"/>
+                <rest-connector name="rest"/>
+            </endpoint>
         </endpoints>
-    </server>
-</infinispan>
+
+    </serv:server>
+
+</config:infinispan>
