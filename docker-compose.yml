@@ -4,6 +4,11 @@ volumes:
       driver: local
 #
 services:
+  infinispan-cli:
+    image: infinispan/cli
+    command: "--connect infinispan:11222"
+    depends_on:
+      - infinispan
   infinispan:
     image: infinispan/server:13.0.2.Final
     ports:
