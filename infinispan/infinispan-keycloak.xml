@@ -5,6 +5,13 @@
 
     <config:cache-container name="default" statistics="true">
         <!-- TODO revise jgroups stack to use -->
+
+        <serialization marshaller="org.infinispan.jboss.marshalling.commons.GenericJBossMarshaller">
+            <allow-list>
+                <regex>org.keycloak.*</regex>
+            </allow-list>
+        </serialization>
+
         <transport
                 cluster="${infinispan.cluster.name:cluster}"
                 stack="${infinispan.cluster.stack:udp}"

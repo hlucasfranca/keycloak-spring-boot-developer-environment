@@ -30,7 +30,7 @@ batch
    fetch-state=false, \
    purge=false, \
    preload=false, \
-   shared=false, singleton=true, \
+   shared=true,\
    socket-timeout=${env.KEYCLOAK_REMOTE_ISPN_SOCK_TIMEOUT}, \
 )
 /subsystem=infinispan/cache-container=keycloak/replicated-cache=work/store=remote:write-attribute(name=properties,value={ \
@@ -43,7 +43,7 @@ batch
     infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
     infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
     infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-    protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:3.0} \
+    protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
     })
 run-batch
 
@@ -57,7 +57,7 @@ batch
   fetch-state=false, \
   purge=false, \
   preload=false, \
-  shared=false, singleton=true, \
+  shared=true,\
   socket-timeout=${env.KEYCLOAK_REMOTE_ISPN_SOCK_TIMEOUT}, \
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=sessions/store=remote:write-attribute(name=properties,value={ \
@@ -70,7 +70,7 @@ batch
      infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
      infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
      infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-     protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:3.0} \
+     protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
     })
 run-batch
 
@@ -84,7 +84,7 @@ batch
   fetch-state=false, \
   purge=false, \
   preload=false, \
-  shared=false, singleton=true, \
+  shared=true,\
   socket-timeout=${env.KEYCLOAK_REMOTE_ISPN_SOCK_TIMEOUT}, \
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=clientSessions/store=remote:write-attribute(name=properties,value={ \
@@ -97,7 +97,7 @@ batch
          infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
          infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
          infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:3.0} \
+         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
     })
 run-batch
 
@@ -111,7 +111,7 @@ batch
   fetch-state=false, \
   purge=false, \
   preload=false, \
-  shared=false, singleton=true, \
+  shared=true,\
   socket-timeout=${env.KEYCLOAK_REMOTE_ISPN_SOCK_TIMEOUT}, \
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=authenticationSessions/store=remote:write-attribute(name=properties,value={ \
@@ -124,7 +124,7 @@ batch
          infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
          infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
          infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:3.0} \
+         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
     })
 run-batch
 
@@ -138,7 +138,7 @@ batch
   fetch-state=false, \
   purge=false, \
   preload=false, \
-  shared=false, singleton=true, \
+  shared=true,\
   socket-timeout=${env.KEYCLOAK_REMOTE_ISPN_SOCK_TIMEOUT}, \
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=offlineSessions/store=remote:write-attribute(name=properties,value={ \
@@ -151,7 +151,7 @@ batch
          infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
          infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
          infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:3.0} \
+         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
     })
 run-batch
 
@@ -165,7 +165,7 @@ batch
   fetch-state=false, \
   purge=false, \
   preload=false, \
-  shared=false, singleton=true, \
+  shared=true,\
   socket-timeout=${env.KEYCLOAK_REMOTE_ISPN_SOCK_TIMEOUT}, \
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=offlineClientSessions/store=remote:write-attribute(name=properties,value={ \
@@ -178,7 +178,7 @@ batch
         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-        protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:3.0} \
+        protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
     })
 run-batch
 
@@ -192,7 +192,7 @@ batch
   fetch-state=false, \
   purge=false, \
   preload=false, \
-  shared=false, singleton=true, \
+  shared=true,\
   socket-timeout=${env.KEYCLOAK_REMOTE_ISPN_SOCK_TIMEOUT}, \
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=actionTokens/store=remote:write-attribute(name=properties,value={ \
@@ -205,7 +205,7 @@ batch
          infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
          infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
          infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:3.0} \
+         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
     })
 run-batch
 
@@ -219,7 +219,7 @@ batch
   fetch-state=false, \
   purge=false, \
   preload=false, \
-  shared=false, singleton=true, \
+  shared=true,\
   socket-timeout=${env.KEYCLOAK_REMOTE_ISPN_SOCK_TIMEOUT}, \
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=loginFailures/store=remote:write-attribute(name=properties,value={ \
@@ -232,7 +232,7 @@ batch
          infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
          infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
          infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:3.0} \
+         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
     })
 run-batch
 
