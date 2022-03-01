@@ -40,7 +40,7 @@ batch
     infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
     infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
     infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-    
+    infinispan.client.hotrod.client_intelligence=BASIC, \
     infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
     infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
     infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
@@ -68,7 +68,7 @@ batch
         infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
         infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
         infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-        
+        infinispan.client.hotrod.client_intelligence=BASIC, \
         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
@@ -96,7 +96,7 @@ batch
        infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
        infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
        infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-       
+       infinispan.client.hotrod.client_intelligence=BASIC, \
        infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
        infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
        infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
@@ -124,7 +124,7 @@ batch
         infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
         infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
         infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-        
+        infinispan.client.hotrod.client_intelligence=BASIC, \
         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
@@ -152,7 +152,7 @@ batch
         infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
         infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
         infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-        
+        infinispan.client.hotrod.client_intelligence=BASIC, \
         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
@@ -180,7 +180,7 @@ batch
        infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
        infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
        infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-       
+       infinispan.client.hotrod.client_intelligence=BASIC, \
        infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
        infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
        infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
@@ -208,7 +208,7 @@ batch
         infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
         infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
         infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-        
+        infinispan.client.hotrod.client_intelligence=BASIC, \
         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
@@ -236,7 +236,7 @@ batch
         infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
         infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
         infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-        
+        infinispan.client.hotrod.client_intelligence=BASIC, \
         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \

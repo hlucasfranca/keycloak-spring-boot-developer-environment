@@ -96,7 +96,9 @@
 
         <endpoints>
             <endpoint socket-binding='default' security-realm="default">
-                <hotrod-connector name="hotrod"/>
+                <hotrod-connector name="hotrod">
+
+                </hotrod-connector>
                 <rest-connector name="rest"/>
             </endpoint>
         </endpoints>
