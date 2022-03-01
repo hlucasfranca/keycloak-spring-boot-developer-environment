@@ -8,7 +8,7 @@ echo SETUP: Begin Remote Keycloak cache configuration...
 # See https://github.com/keycloak/keycloak-documentation/blob/master/server_installation/topics/operating-mode/crossdc/proc-configuring-infinispan.adoc
 
 echo ** Add remote socket binding to infinispan server **
-/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=remote-cache:add(host=infinispan, port=11222)
+/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=remote-cache:add(host=localhost, port=11222)
 
 /subsystem=infinispan/cache-container=keycloak/replicated-cache=work:remove()
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=sessions:remove()
