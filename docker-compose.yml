@@ -4,11 +4,6 @@ volumes:
       driver: local
 #
 services:
-  infinispan-cli:
-    image: infinispan/cli
-    command: "--connect infinispan:11222"
-    depends_on:
-      - infinispan
   infinispan:
     image: infinispan/server:13.0.2.Final
     ports:
@@ -51,10 +46,12 @@ services:
         KEYCLOAK_USER: admin
         KEYCLOAK_PASSWORD: admin
         KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm.json -Dkeycloak.profile.feature.upload_scripts=enabled
+        KEYCLOAK_STATISTICS: all
         # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
         #JDBC_PARAMS: "ssl=true"
       ports:
-        - "8080:8080"
+        - "9090:8080"
+        - "10990:9990"
       depends_on:
         - postgres
         - infinispan

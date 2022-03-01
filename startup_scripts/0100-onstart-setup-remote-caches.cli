@@ -40,10 +40,11 @@ batch
     infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
     infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
     infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
+    
     infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
     infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
     infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-    protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
+    protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.8} \
     })
 run-batch
 
@@ -62,17 +63,18 @@ batch
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=sessions/store=remote:write-attribute(name=properties,value={ \
     rawValues=true, \
-    marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
-     infinispan.client.hotrod.use_auth=true,\
-     infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
-     infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
-     infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-     infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
-     infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
-     infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-     protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
-    })
-run-batch
+        marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
+        infinispan.client.hotrod.use_auth=true,\
+        infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
+        infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
+        infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
+        
+        infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
+        infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
+        infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
+     protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.8} \
+        })
+    run-batch
 
 echo SETUP: Configure Remote Keycloak cache: clientSessions
 batch
@@ -88,18 +90,19 @@ batch
   socket-timeout=${env.KEYCLOAK_REMOTE_ISPN_SOCK_TIMEOUT}, \
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=clientSessions/store=remote:write-attribute(name=properties,value={ \
-    rawValues=true, \
-    marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
-    infinispan.client.hotrod.use_auth=true,\
-         infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
-         infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
-         infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
-         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
-         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
-    })
-run-batch
+   rawValues=true, \
+       marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
+       infinispan.client.hotrod.use_auth=true,\
+       infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
+       infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
+       infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
+       
+       infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
+       infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
+       infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
+         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.8} \
+       })
+   run-batch
 
 echo SETUP: Configure Remote Keycloak cache: authenticationSessions
 batch
@@ -116,17 +119,18 @@ batch
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=authenticationSessions/store=remote:write-attribute(name=properties,value={ \
     rawValues=true, \
-    marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
-    infinispan.client.hotrod.use_auth=true,\
-         infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
-         infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
-         infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
-         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
-         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
-    })
-run-batch
+        marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
+        infinispan.client.hotrod.use_auth=true,\
+        infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
+        infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
+        infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
+        
+        infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
+        infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
+        infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
+         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.8} \
+        })
+    run-batch
 
 echo SETUP: Configure Remote Keycloak cache: offlineSessions
 batch
@@ -143,17 +147,18 @@ batch
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=offlineSessions/store=remote:write-attribute(name=properties,value={ \
     rawValues=true, \
-    marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
-    infinispan.client.hotrod.use_auth=true,\
-         infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
-         infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
-         infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
-         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
-         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
-    })
-run-batch
+        marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
+        infinispan.client.hotrod.use_auth=true,\
+        infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
+        infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
+        infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
+        
+        infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
+        infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
+        infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
+         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.8} \
+        })
+    run-batch
 
 echo SETUP: Configure Remote Keycloak cache: offlineClientSessions
 batch
@@ -169,18 +174,19 @@ batch
   socket-timeout=${env.KEYCLOAK_REMOTE_ISPN_SOCK_TIMEOUT}, \
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=offlineClientSessions/store=remote:write-attribute(name=properties,value={ \
-    rawValues=true, \
-    marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
-   infinispan.client.hotrod.use_auth=true,\
-        infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
-        infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
-        infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-        infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
-        infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
-        infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-        protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
-    })
-run-batch
+   rawValues=true, \
+       marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
+       infinispan.client.hotrod.use_auth=true,\
+       infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
+       infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
+       infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
+       
+       infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
+       infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
+       infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
+        protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.8} \
+       })
+   run-batch
 
 echo SETUP: Configure Remote Keycloak cache: actionTokens
 batch
@@ -197,17 +203,18 @@ batch
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=actionTokens/store=remote:write-attribute(name=properties,value={ \
     rawValues=true, \
-    marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
-    infinispan.client.hotrod.use_auth=true,\
-         infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
-         infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
-         infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
-         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
-         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
-    })
-run-batch
+        marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
+        infinispan.client.hotrod.use_auth=true,\
+        infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
+        infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
+        infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
+        
+        infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
+        infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
+        infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
+         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.8} \
+        })
+    run-batch
 
 echo SETUP: Configure Remote Keycloak cache: loginFailures
 batch
@@ -224,17 +231,18 @@ batch
 )
 /subsystem=infinispan/cache-container=keycloak/distributed-cache=loginFailures/store=remote:write-attribute(name=properties,value={ \
     rawValues=true, \
-    marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
-    infinispan.client.hotrod.use_auth=true,\
-         infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
-         infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
-         infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
-         infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
-         infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
-         infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
-         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.9} \
-    })
-run-batch
+        marshaller=org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory, \
+        infinispan.client.hotrod.use_auth=true,\
+        infinispan.client.hotrod.auth_username=${env.KEYCLOAK_REMOTE_ISPN_USERNAME:keycloak}, \
+        infinispan.client.hotrod.auth_password=${env.KEYCLOAK_REMOTE_ISPN_PASSWORD:password}, \
+        infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5,\
+        
+        infinispan.client.hotrod.sasl_properties.javax.security.sasl.qop=auth,\
+        infinispan.client.hotrod.auth_realm=${env.KEYCLOAK_REMOTE_ISPN_REALM:default}, \
+        infinispan.client.hotrod.auth_server_name=${env.KEYCLOAK_REMOTE_ISPN_SERVER:infinispan}, \
+         protocolVersion=${env.KEYCLOAK_INFINISPAN_HOTROD_PROTOCOL_VERSION:2.8} \
+        })
+    run-batch
 
 echo SETUP: Finished Keycloak cache configuration.
 
